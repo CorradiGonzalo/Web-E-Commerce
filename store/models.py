@@ -2,26 +2,25 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nombre")
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True) 
 
     class Meta:
-        verbose_name_plural = "Categorias"
+        verbose_name_plural = "Categorías"
 
-        def __str__(self):
-            return self.name
-    
+    def __str__(self):
+        return self.name
+
 class Size(models.Model):
-    name = models.CharField(max_length=10, verbose_name="Talle")
+    name = models.CharField(max_length=10, verbose_name="Talle") 
     
     def __str__(self):
         return self.name
 
-
 class Product(models.Model):
-    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name="Categoria")
+    category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE, verbose_name="Categoría")
     name = models.CharField(max_length=255, verbose_name="Nombre")
     slug = models.SlugField(unique=True)
-    description = models.TextField(blank=True, verbose_name="Descripcion")
+    description = models.TextField(blank=True, verbose_name="Descripción")
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Precio")
     image = models.ImageField(upload_to='products/', blank=True, null=True, verbose_name="Imagen")
     is_active = models.BooleanField(default=True, verbose_name="Activo")
@@ -40,6 +39,5 @@ class ProductInventory(models.Model):
         verbose_name = "Inventario"
         verbose_name_plural = "Inventarios"
 
-        def __str__(self):
-            return f"{self.product.name} ({self.size.name})" 
-
+    def __str__(self):
+        return f"{self.product.name} ({self.size.name})"
