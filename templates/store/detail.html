@@ -1,13 +1,51 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ product.name }} | Mi Pequeña Gran Estrella</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+    <header>
+        <h1><a href="{% url 'store:home' %}" style="text-decoration: none; color: inherit;">Mi Pequeña Gran Estrella</a></h1>
+    </header>
+
+    <div class="container product-detail-container">
+        <div class="detail-image">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+                <div class="placeholder">Sin Imagen</div>
+            {% endif %}
+        </div>
+
+        <div class="detail-info">
+            <h2>{{ product.name }}</h2>
+            <span class="category-tag">{{ product.category.name }}</span>
+
+            <p class="price-large">${{ product.price }}</p>
+            <p class="descriptio">{{ product.description }}</p>
+
+            <div class="stock-section">
+                <h4>Talles Disponibles:</h4>
+                <div class="sizes-grid">
+                    {% for item in product.inventory.all %}
+                        {% if item.stock > 0 %}
+                                {{ item.size.name }}
+                            </button>
+                        {% endif %}
+                    {% empty %}
+                        <p class="no-stock">Sin stock disponible</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <br>
+            <button class="btn btn-large">Agregar al Carrito</button>
+        </div>
+    </div>
     
 </body>
 </html>
