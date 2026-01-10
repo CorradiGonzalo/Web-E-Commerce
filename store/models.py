@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name="Nombre")
@@ -41,3 +42,26 @@ class ProductInventory(models.Model):
 
     def __str__(self):
         return f"{self.product.name} ({self.size.name})"
+    
+class Cart(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True, related_name='carts')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updeted_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Carrito de {self.user}"
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    stock_item = models.ForeignKey(ProductInventory, on_delete=models.CASCADE, null=True)
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name} ({self.stock_item.size.name})"
+    
+        @property
+        def total_proce(self):
+            return self.quantity * self.product.price
+        

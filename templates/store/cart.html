@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container cart-container">
+    <h2>Tu Carrito de Compras</h2>
+
+    {% if items %}
+        <div class="cart-table">
+            <div class="cart-header">
+                <span>Producto</span>
+                <span>Talle</span>
+                <span>Precio</span>
+                <span>Cantidad</span>
+                <span>Subtotal</span>
+            </div>
+
+            {% for item in items %}
+            <div class="cart-row">
+                <div class="cart-product">
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                    {% else %}
+                        <div class="cart-placeholder"></div>
+                    {% endif %}
+                        <p>{{ item.product.name }}</p>
+                </div>
+                <div><span class="badge">{{ item.stock_item.size }}</span></div>
+                <div>${{ item.product.proce }}</div>
+                <div>{{ item.quantity }}</div>
+                <div class="row-total">${{ item.total_price }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="cart-summary">
+            <h3>Total a Pagar: <span>${{ total }}</span></h3>
+            <p class="timer-warning">Tenes 15 minutos para completar la compra o tus productos volveran a estar disponibles para las demas personas.</p>
+            
+            <div class="cart-actions">
+                <a href="{% url 'store:home' %}" class="btn btn-online">
+                    ← Seguir Comprando
+                </a>
+
+                <a href="#" class="btn btn-primary">
+                    Finalizar Compra
+                </a>
+            </div>
+        </div>
+
+        {% else %}
+            <div class="empty-cart">
+                <p>Tu carrito esta vacio 😢</p>
+                <a href="{% url 'store:home' %}" class="btn">Ir a la Tienda</a>
+            </div>
+        {% endif %}
+</div>
+
+{% endblock %}
