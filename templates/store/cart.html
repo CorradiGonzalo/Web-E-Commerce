@@ -53,14 +53,40 @@
         <div class="cart-summary">
             <p class="timer-warning">
                 Tenés 15 minutos para completar la compra o tus productos volverán a estar disponibles.
+                <br>
+                Tiempo restante: <span id="cart-timer">15:00</span>
             </p>
             <h3>Total a Pagar: <span>${{ total }}</span></h3>
             
             <div class="cart-actions">
                 <a href="{% url 'store:home' %}" class="btn-outline">← Seguir Comprando</a>
-                <a href="#" class="btn-primary">Finalizar Compra</a>
+                <a href="{% url 'store:checkout' %}" class="btn-primary">Finalizar Compra</a>
             </div>
         </div>
     {% endif %}
 </div>
+{% if expiry_timestamp %}
+<script>
+    (function() {
+        const expiryTs = {{ expiry_timestamp|safe }};
+        if (!expiryTs) return;
+        const timerEl = document.getElementById('cart-timer');
+        function updateTimer() {
+            const now = Date.now();
+            let diff = Math.floor((expiryTs - now) / 1000);
+            if (diff <= 0) {
+                timerEl.textContent = '00:00';
+                // Forzamos recarga para que se libere stock y se vea el carrito vacío
+                window.location.reload();
+                return;
+            }
+            const minutes = String(Math.floor(diff / 60)).padStart(2, '0');
+            const seconds = String(diff % 60).padStart(2, '0');
+            timerEl.textContent = minutes + ':' + seconds;
+        }
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    })();
+</script>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout | Mi Pequeña Gran Estrella{% endblock %}
+
+{% block content %}
+<div class="cart-container checkout-container">
+    <h2>Revisá tu pedido</h2>
+
+    <div class="cart-items-list">
+        {% for item in items %}
+        <div class="cart-row">
+            <div class="col-product product-info">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% else %}
+                    <div class="placeholder-img"></div>
+                {% endif %}
+                <span>{{ item.product.name }}</span>
+            </div>
+            <div class="col-size">
+                <span class="badge">{{ item.stock_item.size.name }}</span>
+            </div>
+            <div class="col-price">
+                ${{ item.product.price }}
+            </div>
+            <div class="col-qty">
+                {{ item.quantity }}
+            </div>
+            <div class="col-total">
+                <strong>${{ item.total_price }}</strong>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="checkout-summary">
+        <h3>Total a pagar: <span>${{ total }}</span></h3>
+
+        <div class="payment-box">
+            <h4>Pago por transferencia bancaria</h4>
+            <p>Para completar tu compra, realizá una transferencia bancaria con el monto total.</p>
+            <p class="payment-alias">
+                Alias de pago: <strong>{{ alias }}</strong>
+            </p>
+            <p class="payment-note">
+                Tu compra se confirmará una vez que recibamos y verifiquemos el comprobante de la transferencia.
+            </p>
+        </div>
+
+        <form method="post" class="checkout-form">
+            {% csrf_token %}
+            <button type="submit" class="btn-primary btn-full">
+                Pagar por transferencia
+            </button>
+        </form>
+
+        <div class="checkout-secondary-actions">
+            <a href="{% url 'store:cart_detail' %}" class="btn-outline">← Volver al carrito</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

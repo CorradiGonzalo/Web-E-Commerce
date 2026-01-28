@@ -1,59 +1,48 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ product.name }} | Mi Pequeña Gran Estrella</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    <header>
-        <h1><a href="{% url 'store:home' %}" style="text-decoration: none; color: inherit;">Mi Pequeña Gran Estrella</a></h1>
-    </header>
+{% block title %}{{ product.name }} | Mi Pequeña Gran Estrella{% endblock %}
 
-    <div class="container product-detail-container">
-        <div class="detail-image">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            {% else %}
-                <div class="placeholder">Sin Imagen</div>
-            {% endif %}
-        </div>
-
-        <div class="detail-info">
-            <h2>{{ product.name }}</h2>
-            <span class="category-tag">{{ product.category.name }}</span>
-
-            <p class="price-large">${{ product.price }}</p>
-            <p class="description">{{ product.description }}</p>
-
-            <form action="{% url 'store:add_to_cart' product.id %}" method="POST">
-                {% csrf_token %} 
-                
-                <div class="stock-section">
-                    <h4>Seleccioná tu talle:</h4>
-                    <div class="sizes-grid">
-                        {% for item in product.inventory.all %}
-                            {% if item.stock > 0 %}
-                                <input type="radio" name="inventory_id" id="size_{{ item.id }}" value="{{ item.id }}" required class="size-input">
-                                
-                                <label for="size_{{ item.id }}" class="size-label">
-                                    {{ item.size.name }}
-                                </label>
-                            {% endif %}
-                        {% empty %}
-                            <p class="no-stock">Sin stock disponible</p>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <br>
-                <button type="submit" class="btn btn-large">AGREGAR AL CARRITO</button>
-            </form>
-        </div>
+{% block content %}
+<div class="container product-detail-container">
+    <div class="detail-image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <div class="placeholder">Sin Imagen</div>
+        {% endif %}
     </div>
-    
-</body>
-</html>
+
+    <div class="detail-info">
+        <h2>{{ product.name }}</h2>
+        <span class="category-tag">{{ product.category.name }}</span>
+
+        <p class="price-large">${{ product.price }}</p>
+        <p class="description">{{ product.description }}</p>
+
+        <form action="{% url 'store:add_to_cart' product.id %}" method="POST">
+            {% csrf_token %} 
+            
+            <div class="stock-section">
+                <h4>Seleccioná tu talle:</h4>
+                <div class="sizes-grid">
+                    {% for item in product.inventory.all %}
+                        {% if item.stock > 0 %}
+                            <input type="radio" name="inventory_id" id="size_{{ item.id }}" value="{{ item.id }}" required class="size-input">
+                            
+                            <label for="size_{{ item.id }}" class="size-label">
+                                {{ item.size.name }}
+                            </label>
+                        {% endif %}
+                    {% empty %}
+                        <p class="no-stock">Sin stock disponible</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <br>
+            <button type="submit" class="btn btn-large">AGREGAR AL CARRITO</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Ingresar | Mi Pequeña Gran Estrella{% endblock %}
+
+{% block content %}
+<section class="auth-container">
+    <div class="auth-card">
+        <h2>Ingresar</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Email</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                {{ form.password }}
+            </div>
+
+            <button type="submit" class="btn-primary btn-full">Entrar</button>
+        </form>
+
+        <p class="auth-switch">
+            ¿Todavía no tenés cuenta?
+            <a href="{% url 'accounts:register' %}">Crear cuenta</a>
+        </p>
+    </div>
+</section>
+{% endblock %}
+

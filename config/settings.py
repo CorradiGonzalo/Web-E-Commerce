@@ -130,8 +130,14 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # 2. Configuración de Imágenes (Media)
 import os
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 3. Idioma 
 LANGUAGE_CODE = 'es-ar'
+
+# 4. Autenticación y redirecciones
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'store:home'
+LOGOUT_REDIRECT_URL = 'store:home'

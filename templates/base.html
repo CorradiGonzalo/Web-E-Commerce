@@ -4,17 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Pequeña Gran Estrella</title>
+    <title>{% block title %}Mi Pequeña Gran Estrella{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <header class="main-header">
-        <div class="logo">
-            <a href="{% url 'store:home' %}">MPGE</a>
-        </div>
-        <nav>
+    <header>
+        <h1>Mi Pequeña Gran Estrella</h1>
+        <nav class="main-nav">
             <a href="{% url 'store:home' %}">Tienda</a>
-            <a href="{% url 'store:cart_detail %'}">Mi Carrito</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'store:cart_detail' %}">Mi carrito</a>
+                <a href="{% url 'accounts:logout' %}">Salir</a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Ingresar</a>
+                <a href="{% url 'accounts:register' %}">Registrarse</a>
+            {% endif %}
+            <a href="{% url 'store:cart_detail' %}" class="cart-icon">&#128722;</a>
         </nav>
     </header>
 
@@ -23,8 +28,9 @@
         {% endblock %}
     </main>
 
-    <footer>
-        <p>&copy; 2026 Mi Pequeña Gran Estrella</p>
+    <footer class="main-footer">
+        <p>Contacto: Gonzalo Corradi</p>
+        <p>&copy; 2026 Gonzalo Corradi. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>
